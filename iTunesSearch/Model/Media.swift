@@ -17,7 +17,7 @@ struct MediaResults: Codable {
 }
 
 struct Media: Codable {
-    var trackId: String?
+    var trackId: Int?
     var kind: String?
     var artistName: String?
     var collectionName: String?
@@ -35,5 +35,18 @@ struct Media: Codable {
         case previewUrl
         case primaryGenreName
         case artworkUrl = "artworkUrl100"
+    }
+}
+extension Media{
+    init (_ core: MediaFavorite)
+    {
+        self.trackId = Int(core.trackId)
+        self.kind = core.kind
+        self.artistName = core.artistName
+        self.collectionName = core.collectionName
+        self.trackViewUrl = core.trackViewUrl
+        self.previewUrl = core.previewUrl
+        self.primaryGenreName = core.primaryGenreName
+        self.artworkUrl = core.artworkUrl
     }
 }

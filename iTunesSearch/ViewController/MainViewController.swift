@@ -25,7 +25,7 @@ class MainViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.topItem?.title = "Music"
+        navigationController?.navigationBar.topItem?.title = "iTunes"
     }
     
     private func setupView() {
@@ -33,7 +33,6 @@ class MainViewController: UIViewController {
         mainTableView.dataSource = self
         mainTableView.tableFooterView = UIView(frame: .zero)
         mainTableView.separatorStyle = .none
-        mainTableView.register(MediaTableViewCell.self, forCellReuseIdentifier: MediaTableViewCell.identifier)
         viewModel.delegate = self
         viewModel.fetchMedia(with: "future")
     }
@@ -48,19 +47,30 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let keys = viewModel.orderedMedia.keys.sorted(by: { $0 < $1 })
+        return keys[section]
+    }
 }
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.media.count
+        return viewModel.getMediaSectionCount(at: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = mainTableView.dequeueReusableCell(withIdentifier: MediaTableViewCell.identifier,
                                                        for: indexPath) as? MediaTableViewCell else { return UITableViewCell() }
-        let mediaItem = viewModel.media[indexPath.row]
-        
+
+        guard let mediaItem = viewModel.getOrderedMedia(from: indexPath.section, at: indexPath.row) else { return cell }
         guard let name = mediaItem.collectionName, let genre = mediaItem.primaryGenreName, let link = mediaItem.trackViewUrl, let artUrl = mediaItem.artworkUrl else { return UITableViewCell()}
         
         cell.configureCellWith(name: name, genre: genre, link: link, artUrl: artUrl)
@@ -68,6 +78,9 @@ extension MainViewController: UITableViewDataSource {
         return cell
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.getOrderedMediaKeysCount()
+    }
     
 }
 
