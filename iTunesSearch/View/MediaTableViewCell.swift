@@ -52,7 +52,7 @@ class MediaTableViewCell: UITableViewCell {
     }
     
     func adjustFavoriteButton() {
-        if !isFavorite {
+        if isFavorite {
             favoriteButton.tintColor = .yellow
             favoriteButton.setImage(UIImage(systemName: "star.fill"
             ), for: .normal)
@@ -72,6 +72,8 @@ class MediaTableViewCell: UITableViewCell {
         url = URL(string: link)
         id = trackId
         isFavorite = favorite
+        print("\(name) (\(id) Favorited? \(favorite)")
+        adjustFavoriteButton()
     }
     
 }
