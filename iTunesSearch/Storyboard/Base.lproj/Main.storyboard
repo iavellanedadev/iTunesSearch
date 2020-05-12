@@ -47,6 +47,7 @@
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFA-44-suY">
                                                     <rect key="frame" x="387" y="73" width="22" height="22"/>
+                                                    <color key="tintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <state key="normal" image="star" catalog="system"/>
                                                     <connections>
                                                         <action selector="favoriteButtonTouch:" destination="X9C-4p-gKU" eventType="touchUpInside" id="2Ke-BC-Uxv"/>
@@ -77,6 +78,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="favoriteButton" destination="qFA-44-suY" id="D41-UE-dTG"/>
                                             <outlet property="genreLabel" destination="b5h-3K-oIs" id="bVG-dX-G6K"/>
                                             <outlet property="mainImageView" destination="XyC-4T-Ggu" id="6PA-hq-bP1"/>
                                             <outlet property="mainNameLabel" destination="Q8K-V6-Bhc" id="FKE-Lb-cds"/>

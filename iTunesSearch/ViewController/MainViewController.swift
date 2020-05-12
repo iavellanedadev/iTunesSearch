@@ -71,9 +71,10 @@ extension MainViewController: UITableViewDataSource {
                                                        for: indexPath) as? MediaTableViewCell else { return UITableViewCell() }
 
         guard let mediaItem = viewModel.getOrderedMedia(from: indexPath.section, at: indexPath.row) else { return cell }
-        guard let name = mediaItem.collectionName, let genre = mediaItem.primaryGenreName, let link = mediaItem.trackViewUrl, let artUrl = mediaItem.artworkUrl else { return UITableViewCell()}
+        guard let name = mediaItem.collectionName, let genre = mediaItem.primaryGenreName, let link = mediaItem.trackViewUrl, let artUrl = mediaItem.artworkUrl, let id = mediaItem.trackId, let fav = mediaItem.isFavorite else { return UITableViewCell()}
         
-        cell.configureCellWith(name: name, genre: genre, link: link, artUrl: artUrl)
+        cell.favoriteDelegate = self
+        cell.configureCellWith(name: name, genre: genre, link: link, artUrl: artUrl, trackId: id, favorite: fav)
         
         return cell
     }
@@ -99,4 +100,24 @@ extension MainViewController: MediaUpdateDelegate {
             self.mainTableView.reloadData()
         }
     }
+}
+
+extension MainViewController: FavoriteService {
+    func addToFavorites(id: Int) {
+        print("added to favorites \(id)")
+        viewModel.addToFavorites(id: id)
+        DispatchQueue.main.async {
+            self.mainTableView.reloadData()
+        }
+    }
+    
+    func removeFromFavorites(id: Int) {
+        print("removed from favorites \(id)")
+        viewModel.removeFromFavorites(id: id)
+        DispatchQueue.main.async {
+            self.mainTableView.reloadData()
+        }
+    }
+    
+    
 }

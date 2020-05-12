@@ -71,19 +71,38 @@ extension MediaViewModel {
     }
     
     public func getOrderedMedia(from section: Int, at index: Int) -> Media? {
-        let media = getMediaSection(from: section)
-        
+        var media = getMediaSection(from: section)
+        if let tradckId = media[index].trackId {
+            media[index].isFavorite = isFavorite(id: tradckId)
+        }
         return media[index]
     }
     
     public func getMediaSectionCount(at section: Int) -> Int {
         let media = getMediaSection(from: section)
-
+        
         return media.count
     }
     
     public func getOrderedMediaKeysCount() -> Int{
         return orderedMedia.keys.count
     }
+    
+}
 
+extension MediaViewModel {
+    func addToFavorites(id: Int) {
+        UserDefaults.standard.set(true, forKey: String(id))
+    }
+    
+    func isFavorite(id: Int) -> Bool{
+        return UserDefaults.standard.bool(forKey: String(id))
+    }
+    
+    func removeFromFavorites(id: Int) {
+        UserDefaults.standard.removeObject(forKey: String(id))
+        
+    }
+    
+    
 }
